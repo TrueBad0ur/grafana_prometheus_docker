@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  exporter1:
+    restart: always
+    image: ngacareer/alpine-node-exporter
+    container_name: exporter1
+    volumes:
+      - /proc:/usr/proc
+      - /sys:/usr/sys
+      - /:/rootfs
+  exporter2:
+    restart: always
+    image: ngacareer/alpine-node-exporter
+    container_name: exporter2
+    volumes:
+      - /proc:/usr/proc
+      - /sys:/usr/sys
+      - /:/rootfs
+  exporter3:
+    restart: always
+    image: ngacareer/alpine-node-exporter
+    container_name: exporter3
+    volumes:
+      - /proc:/usr/proc
+      - /sys:/usr/sys
+      - /:/rootfs
+  prometheus:
+    restart: always
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+    - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    #volumes:
+    #  - ./grafana_data:/var/lib/grafana
+    #  - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    restart: always
+    ports:
+    - "3000:3000"
